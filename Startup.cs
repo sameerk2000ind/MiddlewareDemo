@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MiddlewareDemo.Filters;
+using MiddlewareDemo.Middlewares;
 
 namespace MiddlewareDemo
 {
@@ -26,6 +28,12 @@ namespace MiddlewareDemo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //services.AddMvc(x =>
+            //{
+            //    x.Filters.Add<CustomAuthorization>();
+            //    x.EnableEndpointRouting = false;
+            //}).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +43,14 @@ namespace MiddlewareDemo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMyMiddleWare();
+
+            app.UseCustomLoggerMiddleware();
+
+            app.UseCustomAuthenticationMiddleware();
+
+            //app.UseMvc();
 
             app.UseHttpsRedirection();
 
